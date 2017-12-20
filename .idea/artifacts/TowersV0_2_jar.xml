@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="TowersV0.2:jar">
+    <output-path>$PROJECT_DIR$/../TowersV0.2/out/artifacts/TowersV0_2_jar</output-path>
+    <root id="archive" name="TowersV0.2.jar">
+      <element id="module-output" name="TowersV0.2" />
+    </root>
+  </artifact>
+</component>
