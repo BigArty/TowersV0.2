@@ -1,6 +1,6 @@
 package Source.Core;
 
 public class Cell {
-    int player;
-    boolean tower;
+    public int player;
+    public boolean tower;
 }

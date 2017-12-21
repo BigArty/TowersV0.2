@@ -18,37 +18,23 @@ public class Main extends Thread {
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setMinimumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        f.setVisible(true);
         //Main Canvas---------
-        CanvasMain cm = new CanvasMain();
-        cm.colors=new Color[10];
-        colorSet(cm);
+        CanvasMain cm = new CanvasMain(data);
         Listner L = new Listner(cm);
         f.addMouseListener(L);
         f.addMouseMotionListener(L);
         f.addMouseWheelListener(L);
         f.add(cm);
+        cm.setVisible(true);
+        f.setVisible(true);
         //---------------------
         while (data.core.gameIsRunning) {
-            f.repaint();
+            cm.repaint();
             try {
-                Thread.sleep(1);
+                Thread.sleep(50);
             } catch (InterruptedException ignored) {
             }
         }
-    }
-
-    void colorSet(CanvasMain cm){
-        cm.colors[0]=Color.BLUE;
-        cm.colors[1]=Color.GRAY;
-        cm.colors[2]=Color.green;
-        cm.colors[3]=Color.red;
-        cm.colors[4]=Color.pink;
-        cm.colors[5]=Color.CYAN;
-        cm.colors[6]=Color.ORANGE;
-        cm.colors[7]=Color.magenta;
-        cm.colors[8]=Color.DARK_GRAY;
-        cm.colors[9]=Color.BLACK;
     }
 }
 
