@@ -8,7 +8,8 @@ import java.util.concurrent.Semaphore;
 public class MainStart {
     public static void main(String[] args) {
         int n=5;
-        int players=9;
+        int players=10;
+        Source.Graph.Main mainWindow = new Source.Graph.Main();
         Source.Core.GenThread[] genThreads=new GenThread[n];
         Data[] data=new Data[n];
         Semaphore semaphore=new Semaphore(n,true);
@@ -35,6 +36,6 @@ public class MainStart {
                 bestCore=i;
             }
         }
-        Source.Graph.Main mainWindow = new Source.Graph.Main(data[bestCore]);
+        mainWindow.setData(data[bestCore]);
     }
 }

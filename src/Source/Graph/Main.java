@@ -1,16 +1,29 @@
 package Source.Graph;
 
+import Source.Data;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class Main extends Thread {
-    public Main(Source.Data data) {
-        this.data = data;
+    public Main() {
+        sync =new Object();
+        ready=false;
         start();
     }
 
+    public void setData(Data data) {
+        synchronized (sync){
+            this.data = data;
+            ready=true;
+        }
+    }
+
+    private final Object sync;
+
     private Source.Data data;
+    private boolean ready;
     private JFrame f = new JFrame("TowersV0.2");
 
     @Override
@@ -18,9 +31,28 @@ public class Main extends Thread {
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setMinimumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //Loading-------------
+        JLabel loading = new JLabel("Loading");
+        loading.setVerticalAlignment(JLabel.CENTER);
+        loading.setHorizontalAlignment(JLabel.CENTER);
+        f.add(loading);
+        f.repaint();
+        f.setVisible(true);
+        f.repaint();
+
+        synchronized (sync) {
+            while (!ready) {
+                try {
+                    sync.wait(100);
+                } catch (InterruptedException ignored) {
+                }
+            }
+        }
+
+        f.remove(loading);
         //Main Canvas---------
         CanvasMain cm = new CanvasMain(data);
-        Listner L = new Listner(cm);
+        Listener L = new Listener(cm);
         f.addMouseListener(L);
         f.addMouseMotionListener(L);
         f.addMouseWheelListener(L);
@@ -38,13 +70,13 @@ public class Main extends Thread {
     }
 }
 
-class Listner implements MouseListener, MouseWheelListener, MouseMotionListener {
+class Listener implements MouseListener, MouseWheelListener, MouseMotionListener {
     private double x = 0;
     private double y = 0;
     private boolean pressed = false;
     private CanvasMain canvasMain;
 
-    Listner(CanvasMain cM) {
+    Listener(CanvasMain cM) {
         canvasMain = cM;
     }
 

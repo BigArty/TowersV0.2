@@ -8,10 +8,12 @@ public class PlayerMove extends Thread {
     public int turn;
     private Data data;
     private SynchronousQueue<PlayerEvent> queue;
+    private final Object sync;
     PlayerMove(Data d){
         data=d;
         queue=new SynchronousQueue<>();
         start();
+        sync=new Object();
     }
 
     public void addMove(int x,int y, int player){
@@ -21,7 +23,7 @@ public class PlayerMove extends Thread {
     @Override
     public void run() {
         while (data.core.gameIsRunning){
-            if(!queue.isEmpty()){
+            while(!queue.isEmpty()){
 
             }
         }
