@@ -17,6 +17,7 @@ public class Main {
     public int turn = 0;
     public int[] playerCells;
     public final Object sync=new Object();
+    public boolean generate=false;
 
     public Main(int players) {
         numOfPlayers=players;
@@ -93,7 +94,7 @@ public class Main {
         int nowTime = startTimeSec;
         boolean correct=false;
         int count=0;
-        while ((startTimeSec > nowTime - maxGenerationTime*maxInitRecursion)) {
+        while (generate||(startTimeSec > nowTime - maxGenerationTime*maxInitRecursion)) {
             ++count;
             clearField();
             clearTowers();
