@@ -7,7 +7,7 @@ import java.util.concurrent.Semaphore;
 
 public class MainStart {
     public static void main(String[] args) {
-        int n=5;
+        int n=3;
         int players=10;
         Source.Graph.Main mainWindow = new Source.Graph.Main();
         Source.Core.GenThread[] genThreads=new GenThread[n];
