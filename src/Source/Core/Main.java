@@ -16,10 +16,11 @@ public class Main {
     public Player[] players;
     public int turn = 0;
     public int[] playerCells;
-    public final Object sync = new Object();
+    public final Object sync=new Object();
+    public boolean generate=false;
 
     public Main(int players) {
-        numOfPlayers = players;
+        numOfPlayers=players;
         field = new Cell[width][height];
         this.players = new Player[numOfPlayers];
         playerCells = new int[numOfPlayers];
@@ -91,9 +92,9 @@ public class Main {
     int startTowers1() {
         int startTimeSec = (int) (new Date().getTime() / 1000);
         int nowTime = startTimeSec;
-        boolean correct = false;
-        int count = 0;
-        while ((startTimeSec > nowTime - maxGenerationTime * maxInitRecursion)) {
+        boolean correct=false;
+        int count=0;
+        while (generate||(startTimeSec > nowTime - maxGenerationTime*maxInitRecursion)) {
             ++count;
             clearField();
             clearTowers();
@@ -151,7 +152,7 @@ public class Main {
                 ready[pl] = 1;
             }
             fieldCalc();
-            int min = width * height, max = 0;
+            int min = width*height, max = 0;
             for (int i = 0; i < numOfPlayers; ++i) {
                 if (playerCells[i] > max) {
                     max = playerCells[i];
@@ -173,11 +174,11 @@ public class Main {
             }
             nowTime = (int) (new Date().getTime() / 1000);
         }
-        System.out.println(count + "");
+        System.out.println(count+"");
         if (bestDiff < epsInTerritory) {
             correct = true;
         }
-        if (!correct) {
+        if(!correct){
             return -1;
         }
         return 0;
@@ -274,27 +275,10 @@ public class Main {
         return bestDiff;
     }
 
-    public int move(int x, int y, int player) {
+    public void move(int x, int y, int player) {
         if (turn == player) {
-            if(field[x][y].tower){
-                if(field[x][y].player==player){
-                    return -1;
-                }
-                removeTower(x,y);
-            }
-            else{
-                if(field[x][y].player!=player){
-                    return -1;
-                }
-                else{
-                    putTower(player,x,y);
-                }
-            }
-            fieldCalc();
-        } else {
-            return -1;
+
         }
-        return 0;
     }
 
     public int init() {
@@ -309,7 +293,7 @@ public class Main {
             players[i] = new Player(i);
         }
         int err = startTowers1();
-        int diff = loadBestField();
+        int diff=loadBestField();
         if (err != 0) {
             System.out.println("Can't create fair field");
             System.out.println();
