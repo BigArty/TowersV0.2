@@ -275,9 +275,31 @@ public class Main {
         return bestDiff;
     }
 
-    public void move(int x, int y, int player) {
+    public int move(int x, int y, int player) {
         if (turn == player) {
-
+            if(field[x][y].tower){
+                if(field[x][y].tow.player!=player){
+                    removeTower(x,y);
+                    fieldCalc();
+                    return 0;
+                }
+                else{
+                    return -1;
+                }
+            }
+            else{
+                if(field[x][y].player==player){
+                    putTower(player,x,y);
+                    fieldCalc();
+                    return 0;
+                }
+                else {
+                    return -1;
+                }
+            }
+        }
+        else{
+            return -1;
         }
     }
 
