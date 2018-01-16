@@ -8,7 +8,7 @@ import java.util.concurrent.Semaphore;
 public class MainStart {
     static final int cores = 7;
 
-    public static void startNewGame(int players) {
+    public static Data startNewGame(int players) {
         Source.Graph.Main mainWindow = new Source.Graph.Main();
         Source.Core.GenThread[] genThreads = new GenThread[cores];
         Data[] data = new Data[cores];
@@ -37,7 +37,7 @@ public class MainStart {
             }
         }
         mainWindow.setData(data[bestCore]);
-
+        return data[bestCore];
     }
 
     public static void main(String[] args) {
