@@ -1,5 +1,7 @@
 package Source.Graph;
 
+import Source.Core.Cell;
+import Source.Core.Main;
 import Source.Data;
 
 import javax.swing.*;

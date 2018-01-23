@@ -4,6 +4,11 @@ import java.util.Date;
 import java.util.LinkedList;
 
 public class Main {
+    public int error=0;/*
+    -1 - noName
+    -2 - playerDisconnect;
+
+    */
     public int numOfPlayers;
     public int height = 300;
     public int width = 300;
@@ -17,7 +22,14 @@ public class Main {
     public int turn = 0;
     public int[] playerCells;
     public final Object sync=new Object();
-    public boolean generate=false;
+    public boolean generate=true;
+
+    public void setField(Cell[][] field) {
+        this.field = field;
+        width=field.length;
+        height=field[0].length;
+
+    }
 
     public Main(int players) {
         numOfPlayers=players;

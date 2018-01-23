@@ -4,12 +4,12 @@ import Source.Data;
 
 import java.util.concurrent.SynchronousQueue;
 
-public class PlayerMove extends Thread {
+public class PlayerMoves extends Thread {
     public int turn;
     private Data data;
     private SynchronousQueue<PlayerEvent> queue;
     private final Object sync;
-    PlayerMove(Data d){
+    PlayerMoves(Data d){
         data=d;
         queue=new SynchronousQueue<>();
         start();
@@ -24,7 +24,6 @@ public class PlayerMove extends Thread {
     public void run() {
         while (data.core.gameIsRunning){
             while(!queue.isEmpty()){
-
             }
         }
     }
