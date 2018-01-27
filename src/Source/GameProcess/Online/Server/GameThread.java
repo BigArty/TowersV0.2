@@ -37,7 +37,7 @@ public class GameThread extends Thread{
     public void run() {
         while (core.core.gameIsRunning){
             for(int i=0;i<players;++i){
-                player[i].out.send("");
+                player[i].out.send("field "+core.core.fieldToString());
             }
         }
     }

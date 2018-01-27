@@ -34,7 +34,12 @@ class PlayerThrInput extends Thread{
     public void run() {
         while(parent.core.core.gameIsRunning){
             try {
-                in.readLine();
+                String[] pMsg=in.readLine().split(" ");
+                if(pMsg[0].equals("move")){
+                    synchronized (parent.core.core.sync) {
+                        parent.core.core.move(Integer.parseInt(pMsg[2]), Integer.parseInt(pMsg[3]), Integer.parseInt(pMsg[1]));
+                    }
+                }
             } catch (IOException e) {
                 try {
                     s.close();

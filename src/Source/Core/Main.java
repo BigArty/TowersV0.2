@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.LinkedList;
 
 public class Main {
-    public int error=0;/*
+    public int error = 0;/*
     -1 - noName
     -2 - playerDisconnect;
 
@@ -21,18 +21,34 @@ public class Main {
     public Player[] players;
     public int turn = 0;
     public int[] playerCells;
-    public final Object sync=new Object();
-    public boolean generate=true;
+    public final Object sync = new Object();
+    public boolean generate = true;
 
-    public void setField(Cell[][] field) {
-        this.field = field;
-        width=field.length;
-        height=field[0].length;
 
+    public void fieldFromString(String s) {
+        clearField();
+        clearTowers();
+        String[] data = s.split(" ");
+        for (int i = 0; i < data.length; i += 3) {
+            putTower(Integer.parseInt(data[i + 3]), Integer.parseInt(data[i]), Integer.parseInt(data[i + 1]));
+        }
+        fieldCalc();
+    }
+
+    public String fieldToString() {
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < field.length; ++i) {
+            for (int j = 0; j < field[0].length; ++i) {
+                if (field[i][j].tower) {
+                    s.append(i).append(" ").append(j).append(" ").append(field[i][j].player).append(" ");
+                }
+            }
+        }
+        return s.toString();
     }
 
     public Main(int players) {
-        numOfPlayers=players;
+        numOfPlayers = players;
         field = new Cell[width][height];
         this.players = new Player[numOfPlayers];
         playerCells = new int[numOfPlayers];
@@ -104,9 +120,9 @@ public class Main {
     int startTowers1() {
         int startTimeSec = (int) (new Date().getTime() / 1000);
         int nowTime = startTimeSec;
-        boolean correct=false;
-        int count=0;
-        while (generate||(startTimeSec > nowTime - maxGenerationTime*maxInitRecursion)) {
+        boolean correct = false;
+        int count = 0;
+        while (generate || (startTimeSec > nowTime - maxGenerationTime * maxInitRecursion)) {
             ++count;
             clearField();
             clearTowers();
@@ -164,7 +180,7 @@ public class Main {
                 ready[pl] = 1;
             }
             fieldCalc();
-            int min = width*height, max = 0;
+            int min = width * height, max = 0;
             for (int i = 0; i < numOfPlayers; ++i) {
                 if (playerCells[i] > max) {
                     max = playerCells[i];
@@ -186,11 +202,11 @@ public class Main {
             }
             nowTime = (int) (new Date().getTime() / 1000);
         }
-        System.out.println(count+"");
+        System.out.println(count + "");
         if (bestDiff < epsInTerritory) {
             correct = true;
         }
-        if(!correct){
+        if (!correct) {
             return -1;
         }
         return 0;
@@ -289,28 +305,24 @@ public class Main {
 
     public int move(int x, int y, int player) {
         if (turn == player) {
-            if(field[x][y].tower){
-                if(field[x][y].tow.player!=player){
-                    removeTower(x,y);
+            if (field[x][y].tower) {
+                if (field[x][y].tow.player != player) {
+                    removeTower(x, y);
                     fieldCalc();
                     return 0;
+                } else {
+                    return -1;
                 }
-                else{
+            } else {
+                if (field[x][y].player == player) {
+                    putTower(player, x, y);
+                    fieldCalc();
+                    return 0;
+                } else {
                     return -1;
                 }
             }
-            else{
-                if(field[x][y].player==player){
-                    putTower(player,x,y);
-                    fieldCalc();
-                    return 0;
-                }
-                else {
-                    return -1;
-                }
-            }
-        }
-        else{
+        } else {
             return -1;
         }
     }
@@ -327,7 +339,7 @@ public class Main {
             players[i] = new Player(i);
         }
         int err = startTowers1();
-        int diff=loadBestField();
+        int diff = loadBestField();
         if (err != 0) {
             System.out.println("Can't create fair field");
             System.out.println();
