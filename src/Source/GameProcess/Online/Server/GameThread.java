@@ -39,6 +39,12 @@ public class GameThread extends Thread{
             for(int i=0;i<players;++i){
                 player[i].out.send("field "+core.core.fieldToString());
             }
+            if(core.core.error!=0) {
+                for (int i = 0; i < players; ++i) {
+                    player[i].out.send("error "+core.core.error);
+                }
+                core.core.gameIsRunning=false;
+            }
         }
     }
 }
