@@ -26,8 +26,14 @@ public class Main {
     public final Object sync = new Object();
     public boolean generate = true;
 
-    private void moveCalc(){
+    private int moveFunc(double x){
+        return (int)(300*x*x*x*x*(1-x)*(1-x)+2.5*Math.exp(-6*x)+2);
+    }
 
+    private void moveCalc(){//balance, balance and again balance
+        for (int i=0;i<numOfPlayers;++i){
+            moves[i]=moveFunc(1.0/0*playerCells[i]/width/height);
+        }
     }
 
     public void fieldFromString(String s) {
