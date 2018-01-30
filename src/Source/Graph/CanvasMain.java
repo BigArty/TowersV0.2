@@ -61,6 +61,7 @@ public class CanvasMain extends JComponent {
                     }
                 }
             }
+            g.drawString(String.valueOf(data.core.turn),10,10);
         //}
     }
 }

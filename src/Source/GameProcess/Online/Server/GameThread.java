@@ -37,13 +37,17 @@ public class GameThread extends Thread{
     public void run() {
         while (core.core.gameIsRunning){
             for(int i=0;i<players;++i){
-                player[i].out.send("field "+core.core.fieldToString());
+                player[i].out.send("field "+core.core.turn+" "+core.core.fieldToString());
             }
             if(core.core.error!=0) {
                 for (int i = 0; i < players; ++i) {
                     player[i].out.send("error "+core.core.error);
                 }
                 core.core.gameIsRunning=false;
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ignored) {
             }
         }
     }

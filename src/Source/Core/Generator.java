@@ -4,13 +4,41 @@ import Source.Data;
 
 import java.util.concurrent.Semaphore;
 
-public class Generator {
+public class Generator extends Thread{
+
+    public Generator(int players, boolean generate){
+        gen=generate;
+        this.players=players;
+        start();
+    }
+
+    private boolean gen;
+    private int players;
+
+    @Override
+    public void run() {
+        data=startNewGame(players,gen);
+    }
+
     static final int cores = 7;
-    Source.Core.GenThread[] genThreads;
+    private Source.Core.GenThread[] genThreads;
     public void setGenerate(boolean generate){
         for(int i=0;i<cores;++i){
             genThreads[i].setGenerate(generate);
         }
+    }
+
+    private boolean ready=false;
+    private Data data;
+
+    public Data getData() {
+        while (!ready) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignored) {
+            }
+        }
+        return data;
     }
 
     public Data startNewGame(int players, boolean generate) {
@@ -41,6 +69,7 @@ public class Generator {
                 bestCore = i;
             }
         }
+        ready=true;
         return data[bestCore];
     }
 }

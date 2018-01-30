@@ -10,51 +10,66 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SortThread extends Thread {
-    SortThread() {
-        for (int i = 0; i < ready.length; ++i) {
-            ready[i] = i;
+    int maxPlay = 10;
+
+    private boolean supportedPlrNmb(int players){
+        switch (players) {
+            case 2:
+                return true;
+            case 3:
+                return true;
+            case 4:
+                return true;
+            case 5:
+                return true;
+            case 9:
+                return true;
+            default:
+                return false;
         }
-        for (int i=0;i<sockets.length;++i){
-            sockets[i]=new Socket[i];
+    }
+
+    SortThread() {
+        ready = new int[maxPlay];
+        generator = new Generator[maxPlay];
+        for (int i = 0; i < maxPlay; ++i) {
+            if(supportedPlrNmb(i)) {
+                startGenerator(i);
+            }
+        }
+        for (int i = 0; i < sockets.length; ++i) {
+            sockets[i] = new Socket[i];
         }
         start();
     }
 
     boolean working = true;
 
-    int ready[] = new int[10];
-    Source.Data core[] = new Data[10];
-    Socket[][] sockets=new Socket[10][];
+    private int ready[];
+    private Generator[] generator;
+    private Socket[][] sockets = new Socket[maxPlay][];
     private List<Socket> queue = Collections.synchronizedList(new LinkedList<>());
+
+    private void startGenerator(int players) {
+        generator[players] = new Generator(players, true);
+    }
 
     public void addSocket(Socket s) {
         queue.add(s);
     }
 
     private int connect(Socket s, int players) {
-        switch (players) {
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 9:
-                break;
-            default:
-                return -1;
+        if(!supportedPlrNmb(players)){
+            return -1;
         }
-        sockets[players][ready[players]]=s;
+        sockets[players][ready[players]] = s;
         ready[players]++;
-
-
-        if (ready[players] >= players-1) {
-            new GameThread(core[players],sockets[players],players);
-            Generator generator = new Generator();
-            core[players] = generator.startNewGame(players, true);
-            ready[players]=0;
+        if (ready[players] >= players - 1) {
+            generator[players].setGenerate(false);
+            new GameThread(generator[players].getData(), sockets[players], players);
+            ready[players] = 0;
+            sockets[players]=new Socket[players];
+            generator[players]=new Generator(players,true);
         }
         return 0;
     }

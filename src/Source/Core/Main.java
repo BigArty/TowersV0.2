@@ -4,6 +4,17 @@ import java.util.Date;
 import java.util.LinkedList;
 
 public class Main {
+    public Main(int players) {
+        numOfPlayers = players;
+        field = new Cell[width][height];
+        this.players = new Player[numOfPlayers];
+        playerCells = new int[numOfPlayers];
+        bestField = new int[numOfPlayers][startTower][2];
+        bestDiff = height * width;
+        epsInTerritory = height * width / 100;
+        moves = new int[players];
+    }
+
     public int error = 0;
     /*
     -1 - noName
@@ -15,7 +26,7 @@ public class Main {
     public int height = 300;
     public int width = 300;
     private int startTower = 9;
-    private int maxGenerationTime = 3;
+    private int maxGenerationTime = 1;
     private int maxInitRecursion = 20;
     private int epsInTerritory;
     public Cell[][] field;
@@ -26,13 +37,13 @@ public class Main {
     public final Object sync = new Object();
     public boolean generate = true;
 
-    private int moveFunc(double x){
-        return (int)(300*x*x*x*x*(1-x)*(1-x)+2.5*Math.exp(-6*x)+2);
+    private int moveFunc(double x) {
+        return (int) (300 * x * x * x * x * (1 - x) * (1 - x) + 2.5 * Math.exp(-6 * x) + 2);
     }
 
-    private void moveCalc(){//balance, balance and again balance
-        for (int i=0;i<numOfPlayers;++i){
-            moves[i]=moveFunc(1.0/0*playerCells[i]/width/height);
+    private void moveCalc() {//balance, balance and again balance
+        for (int i = 0; i < numOfPlayers; ++i) {
+            moves[i] = moveFunc(1.0 * playerCells[i] / width / height);
         }
     }
 
@@ -56,17 +67,6 @@ public class Main {
             }
         }
         return s.toString();
-    }
-
-    public Main(int players) {
-        numOfPlayers = players;
-        field = new Cell[width][height];
-        this.players = new Player[numOfPlayers];
-        playerCells = new int[numOfPlayers];
-        bestField = new int[numOfPlayers][startTower][2];
-        bestDiff = height * width;
-        epsInTerritory = height * width / 100;
-        moves=new int[players];
     }
 
     int fieldCalc() {
@@ -128,7 +128,6 @@ public class Main {
             }
         }
     }
-
 
 
     int startTowers1() {
@@ -314,11 +313,9 @@ public class Main {
         for (int i = 0; i < numOfPlayers; ++i) {
             System.out.print(playerCells[i] + " ");
         }
+        moveCalc();
+
         return bestDiff;
-    }
-
-    private void checkTurn(){
-
     }
 
     public int move(int x, int y, int player) {
@@ -327,6 +324,8 @@ public class Main {
                 if (field[x][y].tow.player != player) {
                     removeTower(x, y);
                     fieldCalc();
+                    moves[player]--;
+                    endOfTurn(player);
                     return 0;
                 } else {
                     return -1;
@@ -335,6 +334,8 @@ public class Main {
                 if (field[x][y].player == player) {
                     putTower(player, x, y);
                     fieldCalc();
+                    moves[player]--;
+                    endOfTurn(player);
                     return 0;
                 } else {
                     return -1;
@@ -342,6 +343,18 @@ public class Main {
             }
         } else {
             return -1;
+        }
+    }
+
+    private void endOfTurn(int player) {
+        if (moves[player] <= 0) {
+            turn++;
+            if (turn >= numOfPlayers) {
+                turn = 0;
+            }
+            if (player == numOfPlayers - 1) {
+                moveCalc();
+            }
         }
     }
 

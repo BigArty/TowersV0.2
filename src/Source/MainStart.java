@@ -1,12 +1,15 @@
 package Source;
 
 import Source.Core.Generator;
+import Source.GameProcess.ConsoleGame;
 
 public class MainStart {
     public static void main(String[] args) {
         int players = 9;
         Source.Graph.Main mainWindow = new Source.Graph.Main();
-        Data d = new Generator().startNewGame(players, false);
+        Generator gen=new Generator(players,false);
+        Data d = gen.getData();
         mainWindow.setData(d);
+        new ConsoleGame(d);
     }
 }
