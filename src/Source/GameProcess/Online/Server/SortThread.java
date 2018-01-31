@@ -66,7 +66,7 @@ public class SortThread extends Thread {
         ready[players]++;
         if (ready[players] >= players - 1) {
             generator[players].setGenerate(false);
-            new GameThread(generator[players].getData(), sockets[players], players);
+            new GameThread(generator[players], sockets[players], players);
             ready[players] = 0;
             sockets[players]=new Socket[players];
             generator[players]=new Generator(players,true);
@@ -76,28 +76,39 @@ public class SortThread extends Thread {
 
     @Override
     public void run() {
-        while (working) {
-            while (!queue.isEmpty()) {
-                Socket socket = queue.remove(0);
-                try {
-                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    int players = Integer.parseInt(in.readLine());
-                    int err = connect(socket, players);
-                    if (err != 0) {
-                        new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true).print(err);
-                        socket.close();
-                    }
-                } catch (IOException e) {
+        try {
+            while (working) {
+                while (!queue.isEmpty()) {
+                    Socket socket = queue.remove(0);
                     try {
-                        socket.close();
-                    } catch (IOException ignored) {
+                        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        int players = Integer.parseInt(in.readLine());
+                        int err = connect(socket, players);
+                        if (err != 0) {
+                            new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true).print(err);
+                            socket.close();
+                        }
+                    } catch (IOException e) {
+                        try {
+                            socket.close();
+                        } catch (IOException ignored) {
+                        }
                     }
                 }
-            }
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ignored) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) {
+                }
+            }
+        }
+        finally {
+            for (Socket s : queue) {
+                try {
+                    new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())), true).print("stop");
+                    s.close();
+                } catch (IOException ignored) {
+                }
             }
         }
     }

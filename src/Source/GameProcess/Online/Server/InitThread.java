@@ -9,6 +9,7 @@ public class InitThread extends Thread {
 
     InitThread(SortThread thr) {
         this.thr = thr;
+        new StopThread(thr);
         start();
     }
 
@@ -16,11 +17,12 @@ public class InitThread extends Thread {
 
     @Override
     public void run() {
-        try (ServerSocket s = new ServerSocket(PORT)) {
-            Socket socket = s.accept();
-            thr.addSocket(socket);
-        } catch (IOException ignored) {
+        while (thr.working) {
+            try (ServerSocket s = new ServerSocket(PORT)) {
+                Socket socket = s.accept();
+                thr.addSocket(socket);
+            } catch (IOException ignored) {
+            }
         }
-
     }
 }
