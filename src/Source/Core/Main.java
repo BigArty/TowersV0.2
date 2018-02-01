@@ -13,6 +13,7 @@ public class Main {
         bestDiff = height * width;
         epsInTerritory = height * width / 100;
         moves = new int[players];
+        edited=true;
     }
 
     public int error = 0;
@@ -21,6 +22,7 @@ public class Main {
     -2 - playerDisconnect;
 
     */
+    public boolean edited;
     private int[] moves;
     public int numOfPlayers;
     public int height = 300;
@@ -91,6 +93,7 @@ public class Main {
                 playerCells[nearestPlr]++;
             }
         }
+        edited=true;
         return 0;
     }
 
@@ -323,8 +326,6 @@ public class Main {
             if (field[x][y].tower) {
                 if (field[x][y].tow.player != player) {
                     removeTower(x, y);
-                    fieldCalc();
-                    moves[player]--;
                     endOfTurn(player);
                     return 0;
                 } else {
@@ -333,8 +334,6 @@ public class Main {
             } else {
                 if (field[x][y].player == player) {
                     putTower(player, x, y);
-                    fieldCalc();
-                    moves[player]--;
                     endOfTurn(player);
                     return 0;
                 } else {
@@ -347,6 +346,8 @@ public class Main {
     }
 
     private void endOfTurn(int player) {
+        fieldCalc();
+        moves[player]--;
         if (moves[player] <= 0) {
             turn++;
             if (turn >= numOfPlayers) {

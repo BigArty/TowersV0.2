@@ -42,12 +42,18 @@ public class GameThread extends Thread{
                 core.core.gameIsRunning=false;
             }
             else{
-                for(int i=0;i<players;++i){
-                    player[i].out.send("field "+ core.core.turn+" "+ core.core.fieldToString());
+                if(core.core.edited) {
+                    String s;
+                    synchronized (core.core.sync){
+                        s=core.core.fieldToString();
+                    }
+                    for (int i = 0; i < players; ++i) {
+                        player[i].out.send("field " + core.core.turn + " " + s);
+                    }
                 }
             }
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (InterruptedException ignored) {
             }
         }
