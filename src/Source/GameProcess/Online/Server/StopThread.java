@@ -18,10 +18,12 @@ public class StopThread extends Thread {
             try {
                 String s=r.readLine();
                 if(s.equals("stop")||s.equals("Stop")){
+                    System.out.println("Stopping");
                     thread.working=false;
                     Thread.sleep(2000);
                     System.exit(0);
                 }
+                Thread.sleep(100);
             } catch (IOException | InterruptedException ignored) {
             }
         }
