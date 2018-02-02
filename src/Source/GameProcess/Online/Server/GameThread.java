@@ -50,6 +50,7 @@ public class GameThread extends Thread{
                     for (int i = 0; i < players; ++i) {
                         player[i].out.send("field " + core.core.turn + " " + s);
                     }
+                    core.core.edited=false;
                 }
             }
             try {
