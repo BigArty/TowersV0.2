@@ -51,7 +51,7 @@ public class SortThread extends Thread {
     private List<Socket> queue = Collections.synchronizedList(new LinkedList<>());
 
     private void startGenerator(int players) {
-        generator[players] = new Generator(players, true);
+        generator[players] = new Generator(players, true);///make true
     }
 
     public void addSocket(Socket s) {
@@ -95,7 +95,6 @@ public class SortThread extends Thread {
                         }
                     }
                 }
-
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ignored) {

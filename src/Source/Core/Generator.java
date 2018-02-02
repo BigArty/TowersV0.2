@@ -20,7 +20,7 @@ public class Generator extends Thread{
         data=startNewGame(players,gen);
     }
 
-    static final int cores = 7;
+    static final int cores = 2;
     private Source.Core.GenThread[] genThreads;
     public void setGenerate(boolean generate){
         for(int i=0;i<cores;++i){

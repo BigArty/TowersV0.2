@@ -23,7 +23,8 @@ public class GameThread extends Thread{
         Data core = gen.getData();
         for (int i=0;i<players;i++){
             try {
-                player[i]=new PlayerThreads(playerSockets[i], core,i);
+                    player[i]=new PlayerThreads(playerSockets[i], core,i);
+                    player[i].out.send("id" + i);
             } catch (IOException e) {
                 try {
                     playerSockets[i].close();

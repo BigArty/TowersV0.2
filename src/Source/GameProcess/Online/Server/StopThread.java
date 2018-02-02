@@ -14,7 +14,7 @@ public class StopThread extends Thread {
     @Override
     public void run() {
         BufferedReader r=new BufferedReader(new InputStreamReader(System.in));
-        while(true){
+        while(thread.working){
             try {
                 String s=r.readLine();
                 if(s.equals("stop")||s.equals("Stop")){
@@ -23,7 +23,7 @@ public class StopThread extends Thread {
                     Thread.sleep(2000);
                     System.exit(0);
                 }
-                Thread.sleep(100);
+                Thread.sleep(1000);
             } catch (IOException | InterruptedException ignored) {
             }
         }

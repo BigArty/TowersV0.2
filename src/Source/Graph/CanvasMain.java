@@ -47,14 +47,14 @@ public class CanvasMain extends JComponent {
 
     public void paintComponent(Graphics g) {
         //synchronized (data.core.sync) {
-            for (int i = 0; i < data.core.height; ++i) {
-                for (int j = 0; j < data.core.width; ++j) {
+            for (int i = 0; i < data.core.width; ++i) {
+                for (int j = 0; j < data.core.height; ++j) {
                     g.setColor(colors[data.core.field[i][j].player]);
                     g.fillRect(x0(i * pixForCell), y0(j * pixForCell), (int) (pixForCell * scale + 1), (int) (pixForCell * scale + 1));
                 }
             }
-            for (int i = 0; i < data.core.height; ++i) {
-                for (int j = 0; j < data.core.width; ++j) {
+            for (int i = 0; i < data.core.width; ++i) {
+                for (int j = 0; j < data.core.height; ++j) {
                     if (data.core.field[i][j].tower) {
                         g.setColor(Color.black);
                         g.fillRect((int) (x0(i * pixForCell) - (pixForTower - pixForCell) * scale / 2), (int) (y0(j * pixForCell) - (pixForTower - pixForCell) * scale / 2), (int) (pixForTower * scale), (int) (pixForTower * scale));

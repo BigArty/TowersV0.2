@@ -13,16 +13,18 @@ public class InitThread extends Thread {
         start();
     }
 
-    SortThread thr;
+    private SortThread thr;
 
     @Override
     public void run() {
+        try (ServerSocket s = new ServerSocket(PORT)) {
         while (thr.working) {
-            try (ServerSocket s = new ServerSocket(PORT)) {
                 Socket socket = s.accept();
+                System.out.println("Suffering");
                 thr.addSocket(socket);
-            } catch (IOException ignored) {
-            }
+                Thread.sleep(100);
+        }
+        } catch (IOException | InterruptedException ignored) {
         }
     }
 }
