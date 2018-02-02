@@ -5,6 +5,7 @@ import Source.Data;
 import java.util.concurrent.SynchronousQueue;
 
 public class PlayerMoves{
+    public boolean online;
     private Data data;
     PlayerMoves(Data d){
         data=d;

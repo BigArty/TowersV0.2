@@ -26,7 +26,7 @@ public class Main {
     private int[] moves;
     public int numOfPlayers;
     public int height = 300;
-    public int width = 400;
+    public int width = 300;
     private int startTower = 9;
     private int maxGenerationTime = 1;
     private int maxInitRecursion = 20;
